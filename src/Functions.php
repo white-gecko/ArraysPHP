@@ -7,9 +7,9 @@ namespace WhiteGecko\Arrays;
  */
 function arrayRecursiveEqual($aArray1, $aArray2)
 {
-    if (isAssoc($aArray1) != isAssoc($aArray2)) {
+    if (hasStringKeys($aArray1) != hasStringKeys($aArray2)) {
         return false;
-    } elseif (isAssoc($aArray1)) {
+    } elseif (hasStringKeys($aArray1)) {
         foreach ($aArray1 as $mKey => $mValue) {
             if (array_key_exists($mKey, $aArray2)) {
                 if (is_array($mValue)) {
@@ -67,9 +67,19 @@ function arrayRecursiveEqual($aArray1, $aArray2)
 /**
  * This is ment to determine between the list of objects and the other hierarchical array structure
  * objects list, vs subject, predicate and structure in the object
- * This method is from http://stackoverflow.com/a/173479/414075 by Mark Amery
+ * This method is from http://stackoverflow.com/a/173479/414075 initially by Mark Amery
  */
-function isAssoc($arr)
+function isAssoc(array $arr)
 {
     return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+/**
+ * This is another option to determine between the list of objects and the other hierarchical array structure
+ * objects list, vs subject, predicate and structure in the object
+ * This method is from http://stackoverflow.com/a/4254008/414075 initially by Captain kurO
+ */
+function hasStringKeys(array $array)
+{
+    return count(array_filter(array_keys($array), 'is_string')) > 0;
 }
