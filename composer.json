@@ -1,6 +1,6 @@
 {
-    "name": "white-gecko/array",
-    "description": "Some function for checking the equality of hybrid (associative and iterative) arrays",
+    "name": "white-gecko/arrays",
+    "description": "Some function for checking the equality of hybrid (associative and sequential) arrays",
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^5.4"
