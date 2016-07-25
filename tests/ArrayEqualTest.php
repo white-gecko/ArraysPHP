@@ -246,4 +246,32 @@ class ArrayEqualTest extends TestCase
         );
         $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
+
+    public function testHasStringKeys()
+    {
+        $arrayA = array('c' => 'b');
+        $this->assertTrue(Arrays\hasStringKeys($arrayA));
+        $this->assertTrue(Arrays\isAssoc($arrayA));
+    }
+
+    public function testHasNotStringKeysButIsAssocBecauseOfBiggerNumber()
+    {
+        $arrayA = array(5 => 'b');
+        $this->assertFalse(Arrays\hasStringKeys($arrayA));
+        $this->assertTrue(Arrays\isAssoc($arrayA));
+    }
+
+    public function testNotAssocAndHasNoStringKeys()
+    {
+        $arrayA = array('b', 'c', 6);
+        $this->assertFalse(Arrays\isAssoc($arrayA));
+        $this->assertFalse(Arrays\hasStringKeys($arrayA));
+    }
+
+    public function testNotIsAssocBecauseOfZerobasedIndexAndHasNoStringKey()
+    {
+        $arrayA = array(0 => 'b');
+        $this->assertFalse(Arrays\isAssoc($arrayA));
+        $this->assertFalse(Arrays\hasStringKeys($arrayA));
+    }
 }
