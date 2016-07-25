@@ -1,0 +1,19 @@
+{
+    "name": "white-gecko/array",
+    "description": "Some function for checking the equality of hybrid (associative and iterative) arrays",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Natanael Arndt",
+            "email": "arndtn@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": ["src/Functions.php"]
+    }
+}
