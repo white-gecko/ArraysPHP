@@ -14,6 +14,20 @@ class ArrayEqualTest extends TestCase
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
+    public function testNotEqualOneEmpty()
+    {
+        $arrayA = array();
+        $arrayB = array('b');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualOneEmptyOneAssoc()
+    {
+        $arrayA = array();
+        $arrayB = array('b' => 'x');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
     public function testEqualSequential()
     {
         $arrayA = array('a', 'b', 'c', 'hello', 'z', 'y', 'x');
@@ -22,12 +36,40 @@ class ArrayEqualTest extends TestCase
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
+    public function testNotEqualSequential()
+    {
+        $arrayA = array('a', 'b', 'c', 'hello', 'z', 'y', 'x');
+        $arrayB = array('hello', 'y', 'a', 'x', 'c', 'b');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
     public function testEqualAssoc()
     {
         $arrayA = array('a' => 'a', 'm' => 'b', 'x' => 'c', 1 => 'hello', 5 => 'z', '7' => 'y', 'hello' => 'x');
         $arrayB = array(5 => 'z', 1 => 'hello', '7' => 'y', 'a' => 'a', 'hello' => 'x', 'x' => 'c', 'm' => 'b');
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayA));
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualAssocKey()
+    {
+        $arrayA = array('a' => 'a', 'm' => 'b', 'x' => 'c', 1 => 'hello', 5 => 'z', '7' => 'y', 'hello' => 'x');
+        $arrayB = array(5 => 'z', 1 => 'hello', '9' => 'y', 'a' => 'a', 'hello' => 'x', 'x' => 'c', 'm' => 'b');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualAssocValue()
+    {
+        $arrayA = array('a' => 'a', 'm' => 'b', 'x' => 'c', 1 => 'hello', 5 => 'z', '7' => 'y', 'hello' => 'x');
+        $arrayB = array(5 => 'z', 1 => 'hello', '7' => 'y', 'a' => 'a', 'hello' => 'hello', 'x' => 'c', 'm' => 'b');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualAssocMissing()
+    {
+        $arrayA = array('a' => 'a', 'm' => 'b', 'x' => 'c', 1 => 'hello', 5 => 'z', '7' => 'y', 'hello' => 'x');
+        $arrayB = array(5 => 'z', 1 => 'hello', '7' => 'y', 'a' => 'a', 'hello' => 'x', 'm' => 'b');
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
     public function testEqualHybrid()
@@ -53,6 +95,19 @@ class ArrayEqualTest extends TestCase
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
+    public function testNotEqualRecursiveAssocSequence()
+    {
+        $arrayA = array(
+            'a' => array('a', 'z', 'x'),
+            'x' => 'c'
+        );
+        $arrayB = array(
+            'x' => 'c',
+            'a' => array('a', 'x', 'z', 'b')
+        );
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
     public function testEqualRecursiveSequenceAssoc()
     {
         $arrayA = array(
@@ -65,6 +120,19 @@ class ArrayEqualTest extends TestCase
         );
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayA));
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualRecursiveSequenceAssoc()
+    {
+        $arrayA = array(
+            array('a' => 'a', 'm' => 'b', 'x' => 'c', 1 => 'hello', 5 => 'z', '7' => 'y', 'hello' => 'x'),
+            'a'
+        );
+        $arrayB = array(
+            'a',
+            array(5 => 'z', 1 => 'hello', '7' => 'y', 'a' => 'a', 'tree' => 'x', 'x' => 'c', 'm' => 'b')
+        );
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
     public function testEqualRecursiveSequenceOfSeqArrays()
@@ -81,6 +149,21 @@ class ArrayEqualTest extends TestCase
         );
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayA));
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualRecursiveSequenceOfSeqArrays()
+    {
+        $arrayA = array(
+            array('a', 'b', 'z', 'x'),
+            array('a', 'x'),
+            array('y', 'z')
+        );
+        $arrayB = array(
+            array('a', 'x'),
+            array('y', 'tree'),
+            array('a', 'x', 'z', 'b')
+        );
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 
     public function testEqualRecursiveSequenceOfAssocArrays()
@@ -139,5 +222,28 @@ class ArrayEqualTest extends TestCase
         );
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayA));
         $this->assertTrue(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
+    }
+
+    public function testNotEqualHierarchical()
+    {
+        $arrayA = array(
+            'a' => array('a', 'b', 'z', 'x'),
+            'm' => array(
+                'a' => 'x',
+                'z' => array('a', 'c'),
+                'x' => array(array('a' => 'b'), array('c' => 'x'))
+            ),
+            'x' => 'c'
+        );
+        $arrayB = array(
+            'm' => array(
+                'a' => 'x',
+                'x' => array(array('c' => 'tree'), array(), array('a' => 'b')),
+                'z' => array('a', 'c')
+            ),
+            'a' => array('a', 'b', 'z', 'x'),
+            'x' => 'c'
+        );
+        $this->assertFalse(Arrays\arrayRecursiveEqual($arrayA, $arrayB));
     }
 }

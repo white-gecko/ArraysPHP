@@ -56,7 +56,7 @@ function arrayRecursiveEqual($aArray1, $aArray2)
                 unset($aArray2[$pos]);
             }
         }
-        if (!empty($aArray1) && !empty($aArray2)) {
+        if (!empty($aArray1) || !empty($aArray2)) {
             return false;
         }
     }
